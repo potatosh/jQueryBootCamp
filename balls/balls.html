@@ -1,0 +1,75 @@
+<!--
+|> はねる
+
+コーディング開始 14:15
+コーディング終了 
+-->
+
+<!doctype html>
+<html>
+<head>
+  <title>ball</title>
+  <style type="text/css">
+    .ball {
+      position: absolute;
+      width: 50px;
+      height: 24px;
+    }
+  </style>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script type="text/javascript" src="../jquery.timers.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      var a = 2.0;			// 重力加速度的なもの
+      var e = 0.6;			// 反発係数的なもの
+      
+      var bh = 24;			// ballの高さ
+      var wh = $(document).height();	// ウィンドウの高さ
+      var flr = wh - bh;		// ボタンが全部表示される一番下の座標
+      $(".ball").each(function(index) {
+      	var jumping = false;
+      	var v = 10.0 * (index + 1);	// 最初のバウンド速度
+        $(this).css("left", (index * 60) + "px");
+        $(this).css("top", flr + "px");
+        $(this).mouseover(function() {
+          var boundh = $(this).css("top").replace("px", "");
+          if(jumping) {
+            $(this).stopTime("jumping");
+          }
+          jumping = true;
+          var boundt = 0;
+          var bef = boundh;
+          var now = boundh;
+          var vt = v;
+          $(this).everyTime(20, "jumping", function(time) {
+            var t = time - boundt;
+            if(now > flr) {
+              vt = (now - bef) * e;
+              now = flr;
+              $(this).css("top", now + "px");
+              boundt = time;
+              boundh = flr;
+              if(vt <= 1.5) {
+                jumping = false;
+                $(this).stopTime("jumping");
+              }
+            } else {
+              bef = now;
+              now = boundh - (vt * t - 1 / 2 * a * t * t);
+              $(this).css("top", now + "px");
+            }
+          });
+        });
+      });
+    });
+  </script>
+</head>
+<body>
+  <input type="button" class="ball" value="Push">
+  <input type="button" class="ball" value="Push">
+  <input type="button" class="ball" value="Push">
+  <input type="button" class="ball" value="Push">
+</body>
+</html>
+
+<!-- PONPON (OWO) ＜ｳｪｲｳｪｲｳｪｲ -->

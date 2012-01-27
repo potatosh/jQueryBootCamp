@@ -1,0 +1,58 @@
+<!--
+うおっまぶしっ
+-->
+
+<!doctype html>
+<html>
+  <head>
+    <title>イルミネーション</title>
+    <style type="text/css">
+      body {
+        background-color: black;
+      }
+      
+      #board {
+        position: relative;
+        text-align: center;
+        margin-top: 80px
+      }
+      
+      .char {
+        color: white;
+        display: inline;
+        font-size: 96px;
+      }
+    </style>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript" src="jquery.timers.js"></script>
+    <script>
+      $(document).ready(function() {
+        var url = this.location.href.split("?str=")[0];
+        var strraw = this.location.href.split("?str=")[1];
+        if(strraw) {
+          var str = decodeURI(strraw);
+          var chars = str.split("");
+          
+          $(chars).each(function(i) {
+            var char = $("<div>" + this + "</div>").addClass("char");
+            $(char).appendTo("#board");
+            $(char).everyTime(100, "t" + i, function() {
+              var r = Math.floor(Math.random() * 256).toString(16);
+              var g = Math.floor(Math.random() * 256).toString(16);
+              var b = Math.floor(Math.random() * 256).toString(16);
+              $(this).css("color", "#" + r + g + b);
+            });
+          });
+        }
+        $("#go").click(function() {
+          location.href = "./illumi.html?str=" + encodeURI($("#text").val());
+        })
+      }); 
+    </script>
+  </head>
+  <body>
+    <input type="text" id="text">
+    <input type="button" id="go" value="Go">
+    <div id="board"></div>
+  </body>
+</html>

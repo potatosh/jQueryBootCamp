@@ -1,0 +1,90 @@
+<!--
+Canvas使ってみようず
+-->
+
+<!doctype html>
+<html>
+<head>
+  <title>Canvasだーーーーーーー！！！！！！（ﾄﾞｺﾄﾞｺﾄﾞｺﾄﾞｺﾄﾞｺﾄﾞｺｗｗｗｗｗｗｗ</title>
+  <style type="text/css">
+    #image {
+      margin-left: auto;
+      visibility: hidden;
+    }
+  </style>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script type="text/javascript" src="../jquery.timers.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      var featherStep = 2;
+      var imgMgn = featherStep * 5;
+      var ctx = $("#image").get(0).getContext("2d");
+      var img = new Image();
+      img.src = 'sample.png';
+      var imgArr = new Array(6);
+      
+      img.onload = function() {
+        var cvsw = img.width + imgMgn * 2;
+        var cvsh = img.height + imgMgn * 2;
+        $("#image").attr("width", cvsw).attr("height", cvsh);
+        ctx.drawImage(img, imgMgn, imgMgn);
+        var input = ctx.getImageData(0, 0, cvsw, cvsh);
+        imgArr[0] = input;			//0番目に元の画像を入れるぞ
+        var inData = input.data;		//元画像のピクセルデータをとっておくぞ
+        
+        for(var idx = 1; idx <= 1; idx++) {	//1番目～5番目にぼかした画像を入れるぞ
+          var output = ctx.createImageData(cvsw, cvsh);
+          var outData = output.data;
+          
+          //(x,y) : 色計算の中心点
+          for(var y = imgMgn - (featherStep * idx); y < cvsh - (imgMgn - featherStep * idx); y++) {
+            for(var x = imgMgn - (featherStep * idx); x < cvsw - (imgMgn - featherStep * idx); x++) {
+              for(var c = 0; c < 4; c++) {		//1つのピクセルにはRGBAの4種類のパラメータがあって、それらが配列に4つ連続で並んでいるのだ
+                var dataNum = 0;
+                var di = (y * cvsw + x) * 4 + c;	//データ配列のインデックス（中心点のRGBAいずれか）
+                var sum = 0;
+                //(xx, yy) : 中心点からのズレ
+                for(var yy = -featherStep * idx; yy <= featherStep * idx; yy++) {
+                  for(var xx = -featherStep * idx; xx <= featherStep * idx; xx++) {
+                    if(x + xx >= 0 || y + yy >= 0 || x + xx <= cvsw - 1 || y + yy <= cvsw - 1) {
+                      sum += inData[di + (yy * cvsw + xx) * 4];
+                      dataNum++;
+                    }
+                  }
+                }
+                outData[di] = sum / dataNum;
+              }
+            }
+          }
+          imgArr[idx] = output;
+        }
+        /*
+        //マウスイベント
+        $("#image").mouseover(function() {
+          $(this).stopTime("feather",function() {
+            $(this).everyTime(50, "unfeather", function(t) {
+              ctx.putImageData(imgArr[5 - t], 0, 0);
+            }, 5);
+          });
+        });
+        $("#image").mouseout(function() {
+          $(this).stopTime("unfeather", function() {
+            $(this).everyTime(50, "feather", function(t) {
+              ctx.putImageData(imgArr[t], 0, 0);
+            }, 5);
+          });
+        });
+        */
+        ctx.putImageData(imgArr[1], 0, 0);
+        
+        //ここでようやくcanvas表示
+        $("#image").css("visibility", "visible");
+      };
+    });
+  </script>
+</head>
+<body>
+  <img src="sample.png">
+  <canvas id="image">
+</body>
+</html>

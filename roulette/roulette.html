@@ -1,0 +1,96 @@
+<!--
+ロシアンルーレットを作ろうと思ったらただのルーレットになってしまったでござる
+-->
+
+<html>
+  <head>
+    <title>russian</title>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript" src="../jquery.timers.js"></script>
+    <style type="text/css">
+      body {
+        font-size: 10pt;
+      }
+      
+      .target input {
+        font-weight: bold;
+        position: relative;
+        left: 30px;
+        margin: 3px;
+        border: 3px solid black;
+      }
+      
+      .target p {
+        position: relative;
+        margin: 0;
+        display: inline-block;
+        color: red;
+        width: 20px;
+      }
+      
+      .target input.bingo {
+        color: red;
+        border: 3px solid red;
+      }
+    </style>
+    <script type="text/javascript">
+      $(document).ready(function() {
+        $("#add").click(
+          function() {
+            $("#targets").append("<div class=\"target\"><p></p><input type=\"text\"></div>");
+          }
+        );
+        $("#start").click(
+          function() {
+            $(".target input").attr("readonly", "readonly").removeClass("bingo");
+            $("input[type=button]").attr("disabled", "disabled");
+            $(".target p").html("");
+            var targets = $(".target");
+            var beforeTgt = targets.get(0);
+            var rollCount = Math.floor(Math.random() * 60);
+            if(!$('#fast_mode').attr("checked")) {
+            	rollCount += 420;
+            }
+            var countUp = 0;
+            
+            $("#targets").everyTime(40, function() {
+              $(beforeTgt).find("p").html("");
+              $(beforeTgt).find("input").removeClass("bingo");
+              var tgt = targets.get(countUp % targets.size());
+              $(tgt).find("p").html(":y=-");
+              $(tgt).find("input").addClass("bingo");
+              countUp++;
+              if(countUp >= rollCount) {
+                $(tgt).find("input").everyTime(150, function(cnt) {
+                  if($(this).hasClass("bingo")) {
+                    $(this).removeClass("bingo");
+                  } else {
+                    $(this).addClass("bingo");
+                  }
+                  if(cnt >= 20) {
+                    $("input[type=button]").removeAttr("disabled", "disabled");
+                    $(".target input").removeAttr("readonly");
+                  }
+                }, 20);
+              }
+              beforeTgt = tgt;
+            }, rollCount);
+          }
+        );
+      });
+    </script>
+  </head>
+  <body>
+    <h1>:y=-</h1>
+    <input type="button" id="add" value="Add Target">
+    <input type="button" id="start" value="Start">
+    <input type="checkbox" id="fast_mode"><label for="fast_mode">Non-Wait Mode</label>
+    <fieldset id="targets">
+      <legend>Enter the target.</legend>
+      <div class="target"><p></p><input type="text"></div>
+      <div class="target"><p></p><input type="text"></div>
+    </fieldset>
+  </body>
+</html>
+
+<!-- o^-^o =3 -->

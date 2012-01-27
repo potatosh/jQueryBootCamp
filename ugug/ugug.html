@@ -1,0 +1,69 @@
+<!--
+テキストがなんか変に動きまわる
+-->
+
+<!doctype html>
+<html>
+  <head>
+    <title>キモー＝イナ＝コーレ(794-862)</title>
+    <style>
+      .char {
+        font-size: 48px;
+        position: absolute;
+      }
+    </style>
+    
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript" src="../jquery.timers.js"></script>
+    
+    <script type="text/javascript">
+      //文字が全部表示できる範囲
+      var w = document.width - 48;
+      var h = document.height - 48;
+      
+      var v = 3;	//最高移動ピクセル
+      
+      var amount = 0;
+      
+      $(document).ready(function() {
+        // ボタンをクリックすると
+        $("#button").click(function() {
+          // テキストボックスの文字が分割されて
+          var chars = $("#text").val().split("");
+          $("#text").val("");
+          if(chars.length > 0) {
+            $(chars).each(function(idx) {
+              var id = idx + amount;
+              var x = Math.random() * w;
+              var y = Math.random() * h;
+              var char = $("body").append("<div id=\"char_" + id + "\">" + this + "</div>").find("#char_" + id).addClass("char").css("left", x).css("top", y);	//表示され
+              
+              // それぞれがなんか動きまわる
+              $(char).everyTime(20, "timer_" + id, function() {
+                x += Math.random() * v * 2 - v;
+                if(x < 0) {
+                  x = 0;
+                } else if(x > w) {
+                  x = w;
+                }
+                y += Math.random() * v * 2 - v;
+                if(y < 0) {
+                  y = 0;
+                } else if(y > h) {
+                  y = h;
+                }
+                $(this).css("left", x).css("top", y);
+              });
+            });
+            amount += chars.length;
+          }
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <input type="text" id="text">
+    <input type="button" id="button" value="Add">
+  </body>
+</html>
+<!-- @moopon とコラボしたい -->
