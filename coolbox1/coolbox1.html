@@ -1,0 +1,124 @@
+<!--
+ボックスの表示をかっこよくする何か
+-->
+
+<!doctype html>
+<html>
+  <head>
+    <title>横にｽｰｯ 縦にｽｰｯ</title>
+    <style type="text/css">
+      #menu {
+        float: left;
+      }
+      
+      #boxes {
+      	position: relative;
+      	float: left;
+      	margin: 20px;
+      }
+      .box {
+      	position: absolute;
+        overflow: hidden;
+        border-width: 1px 0px 0px 0px;
+        border-style: solid;
+        border-color: black;
+        display: none;
+      }
+    </style>
+    
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript" src="../common_script/jquery.easing.1.3.js"></script>
+    <script type="text/javascript">
+      var opened = new Array(3);
+      $(document).ready(function() {
+        var contents = $(".content");
+        var boxes = $(".box");
+        
+        $(contents).each(function(idx) {
+          var boxId = "#box_" + (idx + 1);
+          $(boxId).css("width", "0px");
+          $(boxId).css("height", "0px");
+          $(this).mouseover(function() {
+            $(boxId).stop(true)
+                    .css("display", "block")
+                    .animate({
+                      width: "600px"
+                    }, 300, "easeOutExpo", function() {
+                      $(this).css("border-width", "1px");
+                    })
+                    .animate({
+                      height: "250px"
+                    }, 300, "easeOutExpo");
+          });
+          $(this).mouseout(function() {
+            $(boxId).stop(true)
+                    .animate({
+                      height: "0px"
+                    }, 300, "easeOutExpo", function() {
+                      $(this).css("border-width", "1px 0px 0px 0px");
+                    })
+                    .animate({
+                      width: "0px"
+                    }, 300, "easeOutExpo", function() {
+                      $(this).css("display", "none");
+                    });
+          });
+        });
+      });
+      
+      function wait(flag, func, timer) {
+        timerId = setInterval
+      }
+    </script>
+  </head>
+  <body>
+    <div id="menu">
+      <h1 class="content">BOX A</h1>
+      <h1 class="content">BOX B</h1>
+      <h1 class="content">BOX C</h1>
+    </div>
+    <div id="boxes">
+      <div id="box_1" class="box">
+        <h2>Apple</h2>
+        <p>
+          The apple is the pomaceous fruit of the apple tree, species Malus domestica in the rose family (Rosaceae).
+          It is one of the most widely cultivated tree fruits, and the most widely known of the many members of genus
+          Malus that are used by humans. Apples grow on small, deciduous trees. The tree originated in Western Asia,
+          where its wild ancestor, Malus sieversii, is still found today. Apples have been grown for thousands of years
+          in Asia and Europe, and were brought to North America by European colonists. Apples have been present in the
+          mythology and religions of many cultures, including Norse, Greek and Christian traditions. In 2010, the fruit's
+          genome was decoded, leading to new understandings of disease control and selective breeding in apple production.
+        <p>
+        
+        <p>Bibliography: <a href="http://en.wikipedia.org/wiki/Apple">Apple - Wikipedia, the free encyclopedia</a></p>
+      </div>
+      
+      <div id="box_2" class="box">
+        <h2>Blueberry</h2>
+        <p>
+          Blueberries are perennial flowering plants of the genus Vaccinium (a genus which also includes cranberries
+          and bilberries), with indigo-colored berries. Species in the section Cyanococcus are the most common fruits
+          sold as "blueberries" and are native to North America (commercially cultivated highbush blueberries
+          were not introduced into Europe until the 1930s).
+          They are usually erect but sometimes prostrate shrubs varying in size from 10 centimeters (3.9 in) to
+          4 meters (13 ft) tall. In commercial blueberry production, smaller species are known as "lowbush blueberries"
+          (synonymous with "wild"), and the larger species are known as "highbush blueberries".
+        </p>
+        
+        <p>Bibliography: <a href="http://en.wikipedia.org/wiki/Blueberry">Blueberry - Wikipedia, the free encyclopedia</a></p>
+      </div>
+      
+      <div id="box_3" class="box">
+        <h2>Citrus</h2>
+        <p>
+          Citrus is a common term and genus (Citrus) of flowering plants in the rue family, Rutaceae. Citrus is believed
+          to have originated in the part of Southeast Asia bordered by Northeastern India, Myanmar (Burma) and the Yunnan
+          province of China. Citrus fruit has been cultivated in an ever-widening area since ancient times; the best-known
+          examples are the oranges, lemons, grapefruit, and limes.
+        </p>
+        
+        <p>Bibliography: <a href="http://en.wikipedia.org/wiki/Citrus">Citrus - Wikipedia, the free encyclopedia</a></p>
+      </div>
+    </div>
+  </body>
+</html>
