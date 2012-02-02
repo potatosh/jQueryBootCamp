@@ -1,0 +1,78 @@
+<!--
+ヒュー、降ってるねぇ・・・
+-->
+
+<html>
+  <head>
+    <title>rain</title>
+    <style type="text/css">
+      #main {
+        position: relative;
+        margin: 80px auto;
+        width: 640px;
+        height: 480px;
+        overflow: hidden;
+        border: 1px solid gray;
+      }
+      
+      .drop {
+        position: absolute;
+        font-size: 10pt;
+        font-weight: bold;
+        color: #04c;
+        cursor: default;
+      }
+      
+      #who_is_this
+    </style>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript" src="../common_script/jquery.timers.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function() {
+        $("#main").everyTime(10, function() {
+          new Raindrop().drop();
+        });
+      });
+      
+      var Raindrop = function() {
+        this.id = randomId();
+        this.size = 10 + Math.random() * 30;
+        this.startX = Math.random() * 960;
+        this.drop = function() {
+          var move = this.size * 1.5;
+          var d = $("<div>").attr("id", this.id)
+                            .addClass("drop")
+                            .css("font-size", this.size)
+                            .css("left", this.startX)
+                            .css("top", -this.size)
+                            .text(" /")
+                            .everyTime(20, function() {
+                              if($(this).css("top").replace("px", "") >= 480 - move) {
+                                $(this).stopTime();
+                                $("#main").find("#" + this.id).remove();
+                              }
+                              $(this).css("left", "-=" + (move / 2))
+                                     .css("top", "+=" + (move));
+                            });
+          $("#main").append(d);
+        }
+      };
+      
+      const chars = "abcdefghijklmnopqestuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+      function randomId() {
+        var id = "";
+        for(var idx = 0; idx < 16; idx++) {
+          id = id + chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return id;
+      }
+    </script>
+  </head>
+  <body>
+    <div id="main">
+      <div id="who_is_this">
+        
+      </div>
+    </div>
+  </body>
+</html>
