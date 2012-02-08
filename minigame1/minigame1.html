@@ -1,0 +1,86 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Ç™ÇÒÇŒÇÍÅ[</title>
+    <style type="text/css">
+      table {
+        border-width: 0;
+      }
+      
+      td {
+        border-width: 1px solid gray;
+        background-color: #444;
+        width: 24px;
+        height: 24px;
+      }
+      
+      td.on {
+        background-color: #f0f;
+      }
+    </style>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript">
+      var level = 3;
+      $().ready(function() {
+        new LightGame(3).generate();
+      });
+      
+      var LightGame = function(level) {
+        this.generate = function() {
+          var table = $("<table>").attr("id", "body_" + level);
+          for(var y = 0; y < level; y++) {
+            var row = $("<tr>");
+            for(var x = 0; x < level; x++) {
+              var num = y * level + x;
+              var box = $("<td>").attr("id", "box_" + num)
+                                 .addClass("box")
+                                 .click(function() {
+                                   toggleLights(parseInt(this.id.replace("box_", "")));
+                                   if($(this).parents("table").find("td.on").size() == 0) {
+                                     $(this).parents("table").remove();
+                                     new LightGame(parseInt($(this).parents("table").attr("id").replace("body_", "")) + 1).generate();
+                                   }
+                                 });
+              var a = Math.random();
+              if(a >= 0.5) {
+                $(box).addClass("on");
+              }
+              $(row).append(box);
+            }
+            $(table).append(row);
+          }
+          $("body").append(table);
+        };
+        
+        // 
+        function toggleLights(id) {
+          if(id / level - 1 >= 0) {
+            toggleLight(id - level);
+          }
+          if(id % level - 1 >= 0) {
+            toggleLight(id - 1);
+          }
+          toggleLight(id);
+          if(id / level + 1 < level) {
+            toggleLight(id + level);
+          }
+          if(id % level + 1 < level) {
+            toggleLight(id + 1);
+          }
+        }
+        
+        function toggleLight(id) {
+          var target = $("#box_" + id);
+          if($(target).hasClass("on")) {
+            $(target).removeClass("on");
+          } else {
+            $(target).addClass("on");
+          }
+        }
+      };
+    </script>
+  </head>
+  <body>
+    <h1>ëœÇ¶ÇÃè¡ìî</h1>
+  </body>
+</html>
