@@ -24,32 +24,35 @@
         this.spawn = function() {
           var vx = Math.cos(this.range) + Math.cos(this.range) * 0.1 * score;
           var vy = Math.sin(this.range) + Math.sin(this.range) * 0.1 * score;
-          var px = $(document).width() / 2;
-          var py = $(document).height() / 2;
+          var px = $(window).width() / 2;
+          var py = $(window).height() / 2;
           var element = $("<div>").text("(^o^)")
                                   .attr("id", randomId())
                                   .addClass("face")
-                                  .css("left", $(document).width() / 2)
-                                  .css("top", $(document).height() / 2)
+                                  .css("left", $(window).width() / 2)
+                                  .css("top", $(window).height() / 2)
                                   .mousedown(function() {
-                                    score++;
-                                    $(this).stopTime("timer_" + this.id);
-                                    $(this).remove();
-                                    new Face().spawn();
+                                    if($("#go").css("display") == "none") {
+                                      score++;
+                                      $(this).stopTime();
+                                      $(this).remove();
+                                      new Face().spawn();
+                                    }
+                                  })
+                                  .everyTime(20, "timer_" + $(this).attr("id"), function() {
+                                    px += vx;
+                                    py += vy;
+                                    $(this).css({
+                                      left: px,
+                                      top: py
+                                    });
+                                    if(px < -$(this).width() || py < -$(this).height() || px > $(window).width() || py > $(window).height()) {
+                                      $(this).stopTime();
+                                      window.alert("GAME OVER\nSCORE: " + score);
+                                      $("#go").css("display", "inline");
+                                      score = 0;
+                                    }
                                   });
-          element.everyTime(20, "timer_" + this.id, function() {
-            px += vx;
-            py += vy;
-            $(this).css({
-              left: px,
-              top: py
-            });
-            if(px < -$(this).width() || py < -$(this).height() || px > $(document).width() || py > $(document).height()) {
-              $(this).stopTime("timer_" + this.id);
-              window.alert("GAME OVER\nSCORE: " + score);
-              $("#go").css("display", "inline");
-            }
-          });
           $("body").append(element);
         }
       };
