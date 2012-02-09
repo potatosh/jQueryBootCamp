@@ -1,0 +1,81 @@
+<!--
+(^o^)
+-->
+
+<!doctype html>
+<html>
+  <head>
+    <title>(^o^)</title>
+    <style type="text/css">
+      div.face {
+        position: absolute;
+        cursor: pointer;
+        font-size: 16pt;
+        background-color: white;
+      }
+    </style>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript" src="../common_script/jquery.timers.js"></script>
+    <script type="text/javascript">
+      var score = 0;
+      
+      var Face = function() {
+        this.range = Math.random() * 360.0 / 180.0 * Math.PI;
+        this.spawn = function() {
+          var vx = Math.cos(this.range) + Math.cos(this.range) * 0.1 * score;
+          var vy = Math.sin(this.range) + Math.sin(this.range) * 0.1 * score;
+          var px = $(document).width() / 2;
+          var py = $(document).height() / 2;
+          var element = $("<div>").text("(^o^)")
+                                  .attr("id", randomId())
+                                  .addClass("face")
+                                  .css("left", $(document).width() / 2)
+                                  .css("top", $(document).height() / 2)
+                                  .mousedown(function() {
+                                    score++;
+                                    $(this).stopTime("timer_" + this.id);
+                                    $(this).remove();
+                                    new Face().spawn();
+                                  });
+          element.everyTime(20, "timer_" + this.id, function() {
+            px += vx;
+            py += vy;
+            $(this).css({
+              left: px,
+              top: py
+            });
+            if(px < -$(this).width() || py < -$(this).height() || px > $(document).width() || py > $(document).height()) {
+              $(this).stopTime("timer_" + this.id);
+              window.alert("GAME OVER\nSCORE: " + score);
+              $("#go").css("display", "inline");
+            }
+          });
+          $("body").append(element);
+        }
+      };
+      $().ready(function() {
+        $("#go").click(function() {
+          $(this).css("display", "none");
+          $(".face").remove();
+          $("body").oneTime(2000, createFace);
+        })
+      });
+      
+      function createFace() {
+        new Face().spawn();
+      }
+      
+      const chars = "abcdefghijklmnopqestuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+      function randomId() {
+        var id = "";
+        for(var idx = 0; idx < 16; idx++) {
+          id = id + chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return id;
+      }
+    </script>
+  </head>
+  <body>
+    <input id="go" type="button" value="Start">
+  </body>
+</html>
