@@ -47,9 +47,12 @@
                                       top: py
                                     });
                                     if(px < -$(this).width() || py < -$(this).height() || px > $(window).width() || py > $(window).height()) {
-                                      $(this).stopTime();
+                                      $(".face").stopTime();
+                                      if($("#level option:selected").val() == 5 && score >= 30) {
+                                        $("#level").append("<option value=\"99\">&nbsp;");
+                                      }
                                       window.alert("GAME OVER\nSCORE: " + score);
-                                      $("#go").css("display", "inline");
+                                      $("#level, #go").css("display", "inline");
                                       score = 0;
                                     }
                                   });
@@ -58,14 +61,16 @@
       };
       $().ready(function() {
         $("#go").click(function() {
-          $(this).css("display", "none");
+          $("#level, #go").css("display", "none");
           $(".face").remove();
           $("body").oneTime(2000, createFace);
         })
       });
       
       function createFace() {
-        new Face().spawn();
+        for(var i = 0; i < $("#level option:selected").val(); i++) {
+          new Face().spawn();
+        }
       }
       
       const chars = "abcdefghijklmnopqestuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
@@ -79,6 +84,12 @@
     </script>
   </head>
   <body>
+    <select id="level">
+      <option value="1">EASY
+      <option value="2">NORMAL
+      <option value="3">HARD
+      <option value="5">VERY HARD
+    </select>
     <input id="go" type="button" value="Start">
   </body>
 </html>
