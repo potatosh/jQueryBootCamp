@@ -29,8 +29,10 @@
           var element = $("<div>").text("(^o^)")
                                   .attr("id", randomId())
                                   .addClass("face")
-                                  .css("left", $(window).width() / 2)
-                                  .css("top", $(window).height() / 2)
+                                  .css({
+                                    left: $(window).width() / 2,
+                                    top: $(window).height() / 2
+                                  })
                                   .mousedown(function() {
                                     if($("#go").css("display") == "none") {
                                       score++;
