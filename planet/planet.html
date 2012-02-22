@@ -1,0 +1,56 @@
+<!--
+(^o^)‚Ì˜f¯
+((’¼ü‚É‚µ‚©‚È‚ç‚È‚¢‚ñ‚¾‚¯‚ÇAŠp“x‚à‚¸‚ç‚·‚É‚Íª–{‚©‚çì‚è‚È‚¨‚µ‚½‚Ù‚¤‚ª‘‚¢‹C‚ª‚·‚é))
+-->
+
+<!doctype html>
+<html>
+  <head>
+    <title>(^o^)</title>
+    <style type="text/css">
+      .face {
+        position: absolute;
+      }
+    </style>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript">
+      var faces = new Array();
+      
+      var Face = function() {
+        this.size = Math.random() * 90 + 10;
+        this.distance = Math.random() * 2 - 1;
+        this.id;
+        
+        this.put = function(num) {
+          this.id = num;
+          $("body").append(
+            $("<div>").attr("id", "face_" + num)
+                      .addClass("face")
+                      .css("font-size", this.size + "px")
+                      .text("(^o^)")
+          );
+          faces.push(this);
+        };
+        
+        this.move = function(e) {
+          $("#face_" + this.id).css({
+            left: (e.clientX - $(window).width() / 2) * this.distance + $(window).width() / 2,
+            top: (e.clientY - $(window).height() / 2) * this.distance + $(window).height() / 2
+          });
+        };
+      }
+      $(document).ready(function() {
+        for(var i = 0; i < 5; i++) {
+          new Face().put(i);
+        }
+        $(document).bind("mousemove", function(e) {
+          $(faces).each(function() {
+            this.move(e);
+          })
+        });
+      });
+    </script>
+  </head>
+  <body>
+  </body>
+</html>
