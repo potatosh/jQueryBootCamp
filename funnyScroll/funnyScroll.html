@@ -1,0 +1,80 @@
+<!--
+3D‚à‚Ç‚«
+-->
+
+<!doctype html>
+<html>
+  <head>
+    <title></title>
+    <style type="text/css">
+      #frame {
+        position: relative;
+        overflow: hidden;
+        width: 1500px;
+        height: 1500px;
+      }
+      
+      #content {
+        width: 1500px;
+        height: 1500px;
+      }
+      
+      .face {
+        position: absolute;
+        font-size: 10pt;
+        opacity: 40%;
+        z-index: -1;
+      }
+    </style>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript">
+      var faces = new Array();
+      
+      var Face = function() {
+        this.x = Math.random() * $(document).width() * 1.5;
+        this.y = Math.random() * $(document).height() * 1.5;
+        this.delta = Math.random();
+        this.id;
+        
+        this.put = function(num) {
+          this.id = num;
+          $("#content").append(
+            $("<div>").attr("id", "face_" + num)
+                      .addClass("face")
+                      .css({
+                        "font-size": this.delta * 30,
+                        "left": this.x,
+                        "top": this.y
+                      })
+                      .text("(^o^)")
+          );
+          faces.push(this);
+        };
+        
+        this.move = function(e) {
+          $("#face_" + this.id).css({
+            "left": this.x - (document.body.scrollLeft * this.delta),
+            "top": this.y - (document.body.scrollTop * this.delta)
+          });
+        };
+      }
+      
+      $(document).ready(function() {
+        for(var i = 0; i < 100; i++) {
+          new Face().put(i);
+        }
+        $(window).bind("scroll", function(e) {
+          $(faces).each(function() {
+            this.move(e);
+          });
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <div id="frame">
+      <div id="content">
+      </div>
+    </div>
+  </body>
+</html>
